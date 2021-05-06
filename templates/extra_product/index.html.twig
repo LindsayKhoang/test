@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExtraProduct index{% endblock %}
+
+{% block body %}
+    <h1>ExtraProduct index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for extra_product in extra_products %}
+            <tr>
+                <td>{{ extra_product.id }}</td>
+                <td>{{ extra_product.name }}</td>
+                <td>{{ extra_product.description }}</td>
+                <td>{{ extra_product.price }}</td>
+                <td>
+                    <a href="{{ path('extra_product_show', {'id': extra_product.id}) }}">show</a>
+                    <a href="{{ path('extra_product_edit', {'id': extra_product.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('extra_product_new') }}">Create new</a>
+{% endblock %}
