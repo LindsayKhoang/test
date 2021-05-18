@@ -10,7 +10,7 @@
 ###< symfony/framework-bundle ###
 
 
-src/Migrations/
+/migrations/
 
 
 ###> symfony/phpunit-bridge ###
