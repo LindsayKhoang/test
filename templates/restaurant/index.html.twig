@@ -19,7 +19,7 @@
                 <td>{{ restaurant.id }}</td>
                 <td>{{ restaurant.name }}</td>
                 <td>
-                    <a href="{{ path('restaurant_show', {'id': restaurant.id}) }}">show</a>
+                    <a href="{{ path('restaurant_show', {'name': restaurant.name}) }}">show</a>
                     <a href="{{ path('restaurant_edit', {'id': restaurant.id}) }}">edit</a>
                 </td>
             </tr>
