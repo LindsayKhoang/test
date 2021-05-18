@@ -34,16 +34,10 @@ class Restaurant
      */
     private $products;
 
-    /**
-     * @ORM\OneToMany(targetEntity=ExtraProduct::class, mappedBy="restaurant")
-     */
-    private $extraProducts;
-
     public function __construct()
     {
         $this->user = new ArrayCollection();
         $this->products = new ArrayCollection();
-        $this->extraProducts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,36 +116,6 @@ class Restaurant
     public function __toString() : string
     {
         return $this->name;
-    }
-
-    /**
-     * @return Collection|ExtraProduct[]
-     */
-    public function getExtraProducts(): Collection
-    {
-        return $this->extraProducts;
-    }
-
-    public function addExtraProduct(ExtraProduct $extraProduct): self
-    {
-        if (!$this->extraProducts->contains($extraProduct)) {
-            $this->extraProducts[] = $extraProduct;
-            $extraProduct->setRestaurant($this);
-        }
-
-        return $this;
-    }
-
-    public function removeExtraProduct(ExtraProduct $extraProduct): self
-    {
-        if ($this->extraProducts->removeElement($extraProduct)) {
-            // set the owning side to null (unless already changed)
-            if ($extraProduct->getRestaurant() === $this) {
-                $extraProduct->setRestaurant(null);
-            }
-        }
-
-        return $this;
     }
 
 }
