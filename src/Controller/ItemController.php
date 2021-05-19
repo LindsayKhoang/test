@@ -2,9 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Product;
-use App\Form\ProductType;
-use App\Repository\ProductRepository;
+use App\Entity\Item;
+use App\Form\ItemType;
+use App\Repository\ItemRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,60 +13,60 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 /**
- * @Route("/product")
+ * @Route("/item")
  */
-class ProductController extends AbstractController
+class ItemController extends AbstractController
 {
     /**
-     * @Route("/", name="product_index", methods={"GET"})
+     * @Route("/", name="item_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository): Response
+    public function index(ItemRepository $itemRepository): Response
     {
-        return $this->render('product/index.html.twig', [
-            'products' => $productRepository->findAll(),
+        return $this->render('item/index.html.twig', [
+            'items' => $itemRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="product_new", methods={"GET","POST"})
+     * @Route("/new", name="item_new", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function new(Request $request): Response
     {
 
-        $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
+        $itemt = new Item();
+        $form = $this->createForm(ItemType::class, $item);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
+            $entityManager->persist($item);
             $entityManager->flush();
 
-            return $this->redirectToRoute('product_index');
+            return $this->redirectToRoute('item_index');
         }
 
-        return $this->render('product/new.html.twig', [
-            'product' => $product,
+        return $this->render('item/new.html.twig', [
+            'item' => $item,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="product_show", methods={"GET"})
+     * @Route("/{id}", name="item_show", methods={"GET"})
      */
-    public function show(Product $product): Response
+    public function show(Item $item): Response
     {
-        return $this->render('product/show.html.twig', [
-            'product' => $product,
+        return $this->render('item/show.html.twig', [
+            'item' => $item,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="product_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="item_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function edit(Request $request, Product $product): Response
+    public function edit(Request $request, Item $item): Response
     {
 //        $user = $this->getUser();
 //        dd($this->isGranted('ROLE_ADMIN'));
@@ -79,17 +79,17 @@ class ProductController extends AbstractController
 //        if(in_array($user->getId(), $restaurantOwnersIds)) {
         if($this->isGranted('ROLE_ADMIN')) {
             //        dd($user->getRestaurants()->getValues()[0]->getUser()->getValues());
-            $form = $this->createForm(ProductType::class, $product);
+            $form = $this->createForm(ItemType::class, $item);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('product_index');
+                return $this->redirectToRoute('item_index');
             }
 
-            return $this->render('product/edit.html.twig', [
-                'product' => $product,
+            return $this->render('item/edit.html.twig', [
+                'item' => $item,
                 'form' => $form->createView(),
             ]);
         } else {
@@ -98,17 +98,17 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="product_delete", methods={"POST"})
+     * @Route("/{id}", name="item_delete", methods={"POST"})
      * @IsGranted("ROLE_ADMIN")
      */
-    public function delete(Request $request, Product $product): Response
+    public function delete(Request $request, Item $item): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$item->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($product);
+            $entityManager->remove($item);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('product_index');
+        return $this->redirectToRoute('item_index');
     }
 }

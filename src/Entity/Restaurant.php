@@ -30,14 +30,21 @@ class Restaurant
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="restaurant")
+     * @ORM\ManyToMany(targetEntity=Item::class, mappedBy="restaurants")
      */
-    private $products;
+    private $items;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Menu::class, inversedBy="restaurants")
+     */
+    private $menus;
+
 
     public function __construct()
     {
         $this->user = new ArrayCollection();
-        $this->products = new ArrayCollection();
+        $this->items = new ArrayCollection();
+        $this->menus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,41 +88,65 @@ class Restaurant
         return $this;
     }
 
-    /**
-     * @return Collection|Product[]
-     */
-    public function getProducts(): Collection
-    {
-        return $this->products;
-    }
 
-    public function addProduct(Product $product): self
-    {
-        if (!$this->products->contains($product)) {
-            $this->products[] = $product;
-            $product->setRestaurant($this);
-        }
 
-        return $this;
-    }
-
-    public function removeProduct(Product $product): self
-    {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getRestaurant() === $this) {
-                $product->setRestaurant(null);
-            }
-        }
-
-        return $this;
-    }
     /**
      * @return string|null
      */
     public function __toString() : string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|Item[]
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    public function addItem(Item $item): self
+    {
+        if (!$this->items->contains($item)) {
+            $this->items[] = $item;
+            $item->addRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeItem(Item $item): self
+    {
+        if ($this->items->removeElement($item)) {
+            $item->removeRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Menu[]
+     */
+    public function getMenus(): Collection
+    {
+        return $this->menus;
+    }
+
+    public function addMenu(Menu $menu): self
+    {
+        if (!$this->menus->contains($menu)) {
+            $this->menus[] = $menu;
+        }
+
+        return $this;
+    }
+
+    public function removeMenu(Menu $menu): self
+    {
+        $this->menus->removeElement($menu);
+
+        return $this;
     }
 
 }
